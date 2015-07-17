@@ -23,7 +23,9 @@ type BackOff struct {
 }
 
 func NewBackoff(p BackOffParams) *BackOff {
+	ctx, _ := context.WithCancel(context.Background())
 	return &BackOff{
+		Ctx:           ctx,
 		BackOffParams: p,
 	}
 }
@@ -61,7 +63,7 @@ func (b *BackOff) Retry(cb func() error) error {
 }
 
 func (b *BackOff) Next(current time.Duration) (next time.Duration, stop bool) {
-	if b.MaxElapsedTime != 0 && time.Now().Sub(b.startTime) > b.MaxElapsedTime {
+	if b.MaxElapsedTime != -1 && time.Now().Sub(b.startTime) > b.MaxElapsedTime {
 		return next, true
 	}
 	delta := float64(current) * b.RandomizationFactor
