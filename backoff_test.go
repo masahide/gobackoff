@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"golang.org/x/net/context"
 )
 
 func TestRetry(t *testing.T) {
@@ -14,7 +16,8 @@ func TestRetry(t *testing.T) {
 		MaxInterval:         500 * time.Millisecond,
 		MaxElapsedTime:      1000 * time.Millisecond,
 	}
-	b := NewBackoff(param)
+	ctx, _ := context.WithCancel(context.Background())
+	b := NewBackoffParam(ctx, param)
 
 	start := time.Now()
 	times := []time.Duration{}
@@ -44,7 +47,8 @@ func TestRetryCancel(t *testing.T) {
 		MaxInterval:         500 * time.Millisecond,
 		MaxElapsedTime:      1000 * time.Millisecond,
 	}
-	b := NewBackoff(param)
+	ctx, _ := context.WithCancel(context.Background())
+	b := NewBackoffParam(ctx, param)
 
 	start := time.Now()
 	times := []time.Duration{}

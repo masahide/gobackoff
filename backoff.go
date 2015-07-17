@@ -7,6 +7,24 @@ import (
 	"golang.org/x/net/context"
 )
 
+const (
+	DefaultInitialInterval     = 500 * time.Millisecond
+	DefaultRandomizationFactor = 0.8
+	DefaultMultiplier          = 1.5
+	DefaultMaxInterval         = 300 * time.Second
+	DefaultMaxElapsedTime      = 900 * time.Second
+)
+
+var (
+	DefaultParam = BackOffParams{
+		InitialInterval:     DefaultInitialInterval,
+		RandomizationFactor: DefaultRandomizationFactor,
+		Multiplier:          DefaultMultiplier,
+		MaxInterval:         DefaultMaxInterval,
+		MaxElapsedTime:      DefaultMaxElapsedTime,
+	}
+)
+
 type BackOffParams struct {
 	InitialInterval     time.Duration
 	RandomizationFactor float64
@@ -22,15 +40,15 @@ type BackOff struct {
 	currentInterval time.Duration
 }
 
-func NewBackoff(p BackOffParams) *BackOff {
+func NewBackoff() *BackOff {
 	ctx, _ := context.WithCancel(context.Background())
 	return &BackOff{
 		Ctx:           ctx,
-		BackOffParams: p,
+		BackOffParams: DefaultParam,
 	}
 }
-
-func NewBackoffCtx(ctx context.Context, p BackOffParams) *BackOff {
+func NewBackoffParam(ctx context.Context, p BackOffParams) *BackOff {
+	//ctx, _ := context.WithCancel(context.Background())
 	return &BackOff{
 		Ctx:           ctx,
 		BackOffParams: p,
