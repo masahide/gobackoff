@@ -40,14 +40,14 @@ type BackOff struct {
 	currentInterval time.Duration
 }
 
-func NewBackoff() *BackOff {
+func NewBackOff() *BackOff {
 	ctx, _ := context.WithCancel(context.Background())
 	return &BackOff{
 		Ctx:           ctx,
 		BackOffParams: DefaultParam,
 	}
 }
-func NewBackoffParam(ctx context.Context, p BackOffParams) *BackOff {
+func NewBackOffParam(ctx context.Context, p BackOffParams) *BackOff {
 	//ctx, _ := context.WithCancel(context.Background())
 	return &BackOff{
 		Ctx:           ctx,

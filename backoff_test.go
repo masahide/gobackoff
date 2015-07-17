@@ -17,7 +17,7 @@ func TestRetry(t *testing.T) {
 		MaxElapsedTime:      1000 * time.Millisecond,
 	}
 	ctx, _ := context.WithCancel(context.Background())
-	b := NewBackoffParam(ctx, param)
+	b := NewBackOffParam(ctx, param)
 
 	start := time.Now()
 	times := []time.Duration{}
@@ -48,7 +48,7 @@ func TestRetryCancel(t *testing.T) {
 		MaxElapsedTime:      1000 * time.Millisecond,
 	}
 	ctx, _ := context.WithCancel(context.Background())
-	b := NewBackoffParam(ctx, param)
+	b := NewBackOffParam(ctx, param)
 
 	start := time.Now()
 	times := []time.Duration{}
