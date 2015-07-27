@@ -11,8 +11,8 @@ const (
 	DefaultInitialInterval     = 500 * time.Millisecond
 	DefaultRandomizationFactor = 0.8
 	DefaultMultiplier          = 1.5
-	DefaultMaxInterval         = 300 * time.Second
-	DefaultMaxElapsedTime      = 900 * time.Second
+	DefaultMaxInterval         = 5 * time.Minute
+	DefaultMaxElapsedTime      = 20 * time.Minute
 )
 
 var (
