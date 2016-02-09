@@ -36,8 +36,6 @@ type BackOffParams struct {
 type BackOff struct {
 	Ctx context.Context
 	BackOffParams
-	startTime       time.Time
-	currentInterval time.Duration
 }
 
 func NewBackOff() *BackOff {
@@ -59,15 +57,15 @@ func (b *BackOff) Retry(cb func() error) error {
 	var err error
 	var next time.Duration
 	var stop bool
-	b.startTime = time.Now()
-	b.currentInterval = b.InitialInterval
+	startTime := time.Now()
+	currentInterval := b.InitialInterval
 
 	for {
 		if err = cb(); err == nil {
 			return nil
 		}
 
-		if next, stop = b.Next(b.currentInterval); stop {
+		if next, stop = b.nextTry(startTime, currentInterval); stop {
 			return err
 		}
 
@@ -80,8 +78,8 @@ func (b *BackOff) Retry(cb func() error) error {
 
 }
 
-func (b *BackOff) Next(current time.Duration) (next time.Duration, stop bool) {
-	if b.MaxElapsedTime != -1 && time.Now().Sub(b.startTime) > b.MaxElapsedTime {
+func (b *BackOff) nextTry(startTime time.Time, current time.Duration) (next time.Duration, stop bool) {
+	if b.MaxElapsedTime != -1 && time.Now().Sub(startTime) > b.MaxElapsedTime {
 		return next, true
 	}
 	delta := float64(current) * b.RandomizationFactor
