@@ -73,6 +73,7 @@ func (b *BackOff) Retry(cb func() error) error {
 		case <-b.Ctx.Done():
 			return b.Ctx.Err()
 		case <-time.After(next):
+			currentInterval = next
 		}
 	}
 
